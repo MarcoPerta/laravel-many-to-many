@@ -19,7 +19,7 @@ class PostsController extends Controller
     {
 
         $data = [
-            'posts' => Post::with('category')->paginate(10)
+            'posts' => Post::with('category', 'tags')->paginate(10)
         ];
 
         return view ('admin.posts.index', $data);

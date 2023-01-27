@@ -30,6 +30,11 @@
                     </td>
                     {{-- <td>{{$post->body}}</td> --}}
                     <td>
+                        @foreach ($post->tags as $singoloTag)
+                            {{ $singoloTag->name }}
+                        @endforeach
+                    </td>
+                    <td>
                         <a href="{{ route('admin.posts.edit', $post->id) }}">
                             Edit
                         </a>

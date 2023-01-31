@@ -7,6 +7,7 @@ use App\Category;
 use App\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -55,6 +56,11 @@ class PostsController extends Controller
         ]);
 
         $newPost = new Post();
+        // controllo se l'img è stata caricata nel input
+        if( array_key_exists('image', $data) ){
+            $cover_url = Storage::put('post_covers' , $data['image']);
+            $data['cover'] = $cover_url;
+        }
         $newPost->fill($data);
         $newPost->save();
 
@@ -62,6 +68,11 @@ class PostsController extends Controller
         if ( array_key_exists( 'tags', $data ) ){
             $newPost->tags()->sync( $data['tags']);
         }
+
+        // invio mail di creazione
+        $mail = new CreatePostMail($newPost);
+        $email_utente = Auth::user()->email;
+        Mail::to($email_utente)->send($mail);
 
         return redirect()->route('admin.posts.index');
     }

@@ -31,6 +31,6 @@ class CreatePostMail extends Mailable
      */
     public function build()
     {
-        return $this->view('mails.posts.createPost', ['post' => $this->post]);
+        return $this->view('admin.mails.posts.createPost', ['post' => $this->post]);
     }
 }

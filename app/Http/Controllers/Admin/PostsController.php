@@ -8,6 +8,9 @@ use App\Post;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\CreatePostMail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class PostsController extends Controller
 {
@@ -48,7 +51,7 @@ class PostsController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-          
+        // dd($data);
         // Validazione
         $request->validate([
             'title' => 'required',
@@ -57,8 +60,10 @@ class PostsController extends Controller
 
         $newPost = new Post();
         // controllo se l'img è stata caricata nel input
+        // dd($data);
         if( array_key_exists('image', $data) ){
             $cover_url = Storage::put('post_covers' , $data['image']);
+            //dd($cover_url );
             $data['cover'] = $cover_url;
         }
         $newPost->fill($data);
